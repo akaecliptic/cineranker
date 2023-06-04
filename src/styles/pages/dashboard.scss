@@ -179,7 +179,11 @@ div.editable-avatar {
 // LISTS 
 
 section.collecions-list {
-    margin: auto 0;
+    width: 100%;
+    max-width: 750px;
+
+    margin: auto;
+    
     display: flex;
     flex-direction: column;
     gap: .25rem;

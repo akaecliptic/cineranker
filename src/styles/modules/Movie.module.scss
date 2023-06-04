@@ -3,7 +3,7 @@
 .container {
     width: 100%;
 
-    padding: .1rem .5rem;
+    padding: .5rem .75rem;
 
     display: flex;
     align-items: center;
@@ -59,7 +59,7 @@
     @include auxil.responsive(1) {
         flex-direction: column;
         align-self: center;
-        gap: .1rem;
+        gap: .5rem;
 
         .logo {
             width: 3rem;
