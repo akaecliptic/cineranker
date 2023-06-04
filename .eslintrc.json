@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "next",
+        "prettier"
+    ],
+    "rules": {
+        "jsx-quotes": [
+            "warn",
+            "prefer-single"
+        ],
+        "no-unused-vars": [
+            "warn",
+            {
+                "args": "none",
+                "varsIgnorePattern": "_"
+            }
+        ]
+    }
+}

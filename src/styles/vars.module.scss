@@ -1,0 +1,15 @@
+@use "auxil.scss";
+
+:export {
+    colorPrimary: auxil.$color-primary;
+    colorSecondary: auxil.$color-secondary;
+
+    colorAlert : auxil.$color-alert;
+    colorInfo : auxil.$color-info;
+
+    colorCard: auxil.$color-card;
+    colorBackground: auxil.$color-background;
+
+    colorText : auxil.$color-text;
+    colorTextSecondary : auxil.$color-secondary;
+}

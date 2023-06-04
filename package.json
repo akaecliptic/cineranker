@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "cineranker",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,30 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@picmo/renderer-twemoji": "^5.8.4",
+    "@supabase/auth-helpers-nextjs": "^0.6.1",
+    "@supabase/auth-ui-react": "^0.4.2",
+    "@supabase/auth-ui-shared": "^0.1.6",
+    "@supabase/supabase-js": "^2.21.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11",
-    "next": "13.3.0",
+    "moviedb-promise": "^3.4.0",
+    "next": "^13.4.2",
+    "picmo": "^5.8.4",
+    "qrcode.react": "^3.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "sass": "^1.61.0",
+    "sharp": "^0.32.1",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "encoding": "^0.1.13",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.4.0",
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "2.8.8"
   }
 }

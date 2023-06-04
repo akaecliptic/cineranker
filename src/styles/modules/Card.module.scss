@@ -1,0 +1,150 @@
+@use "../auxil.scss";
+
+.container {
+    width: 100%;
+    height: 100%;
+
+    margin: 2rem auto;
+    padding: 1rem .5rem;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: black;
+    border-radius: .25rem;
+
+    transition: margin .1s ease-in-out;
+
+    @include auxil.responsive(1) {
+        margin: .25rem auto;
+    }
+
+    > * {
+        display: flex;
+    }
+}
+
+// HEAD
+
+.head {
+    width: 100%;
+    padding: .5rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+
+    > .heading {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        flex-direction: column;
+
+        .title {
+            text-align: center;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+        }
+    }
+
+    > button {
+        @include auxil.button-icon-alt;
+
+        height: 100%;
+        width: 4.5rem;
+
+        > svg {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.dots {
+    display: flex;
+    gap: 1rem;
+
+    > .dot {
+        width: .5rem;
+        height: .5rem;
+    
+        background-color: auxil.$color-text-secondary;
+        border-radius: .75rem;
+
+        transition: width .15s linear, background-color .2s linear;
+    }
+
+    > .dot.active {
+        width: 1rem;
+        background-color: auxil.$color-primary;
+    }
+}
+
+// BODY
+
+// https://css-tricks.com/css-only-carousel/ 🙏
+.body {
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    
+    .list {
+        width: 100%;
+        
+        margin: auto;
+        padding: 1rem .25rem;
+        
+        flex-shrink: 0;
+        scroll-snap-align: start;
+    }
+}
+
+// FOOT
+
+.foot {
+    width: 100%;
+    padding: .2rem 2rem;
+    justify-content: space-between;
+
+    > button {
+        @include auxil.button-icon-alt;
+
+        > svg {
+            font-size: 1.5rem;
+        }
+    }
+}
+    //REACTION
+
+.reactions {
+    display: flex;
+    flex: 1;
+    gap: .1rem;
+}
+
+.reaction {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+
+    background-color: lighten(auxil.$color-dark, 10%);
+
+    cursor: pointer;
+    transition: background-color .15s linear;
+    
+    &:hover {
+        background-color: lighten(auxil.$color-dark, 15%);
+    }
+    
+    &:active {
+        background-color: lighten(auxil.$color-dark, 20%);
+    }
+
+    > img {
+        filter: drop-shadow(0 0 1px auxil.$color-text-secondary);
+    }
+
+    > span {
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,72 @@
+@use "auxil.scss";
+
+* {
+	margin: 0;
+	padding: 0;
+
+	font-size: 1rem;
+	font-family: auxil.$font-family;
+	font-weight: auxil.$font-weight-primary;
+
+	box-sizing: border-box;
+
+	&::selection {
+		color: auxil.$color-text-dark;
+		background-color: auxil.$color-text;
+	}
+}
+
+html,
+body {
+	width: 100vw;
+	height: 100%;
+
+	overflow: hidden;
+
+	color: auxil.$color-text;
+	background-color: auxil.$color-background;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	padding: .5rem;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+a {
+	text-decoration: none;
+	color: auxil.$color-text;
+
+	&::selection {
+		color: auxil.$color-text-dark;
+		background-color: auxil.$color-primary;
+	}
+}
+
+button {
+	padding: .5rem 1rem;
+
+	color: auxil.$color-text;
+	background-color: auxil.$color-primary;
+
+	border: none;
+	border-radius: .25rem;
+
+	cursor: pointer;
+
+	&:disabled {
+		cursor: default;
+		color: auxil.$color-text-secondary;
+		background-color: darken(auxil.$color-secondary, 5%);
+	}
+}
+
+svg.picmo__twemoji {
+	font-size: clamp(1.5rem, 3vw, 2rem);
+}

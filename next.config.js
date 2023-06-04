@@ -1,8 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
-}
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "twemoji.maxcdn.com",
+				port: "",
+				pathname: "/v/latest/**",
+			},
+			{
+				protocol: "https",
+				hostname: "cdn.jsdelivr.net",
+				port: "",
+				pathname: "/gh/jdecked/**",
+			},
+			{
+				protocol: "https",
+				hostname: "www.themoviedb.org",
+				port: "",
+				pathname: "/t/p/**",
+			},
+		],
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

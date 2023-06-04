@@ -1,0 +1,223 @@
+@use "../auxil";
+
+// TOP
+
+header.top {
+    padding: .5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button#open-edit-tab {
+    width: 3.5rem;
+    height: 3.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 100%;
+
+    @include auxil.button-accent;
+
+    &:hover > svg {
+        opacity: 1;
+        left: 4rem;
+    }
+
+    > svg {
+        position: absolute;
+        left: 2rem;
+        
+        opacity: 0;
+
+        font-size: 2rem;
+        transition: all .15s linear;
+    }
+
+    > img {
+        width: 2rem;
+        height: 2rem;
+        margin: auto;
+        display: flex;
+    }
+}
+
+header.top > div.action-buttons {
+    display: flex;
+    gap: .25rem;
+    
+    button {
+        font-size: 1.5rem;
+        @include auxil.button-accent;
+    } 
+}
+
+// EDIT PROFILE TAB
+
+aside#edit-profile-tab {
+    width: 100%;
+    height: 100%;
+
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    left: -100vw;
+    top: 0;
+
+    opacity: 0;
+    visibility: hidden;
+    background-color: auxil.$color-dark;
+
+    transition: all .25s ease-in-out;
+
+    &.open {
+        left: 0;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    > .container {
+        width: 75%;
+        max-width: 500px;
+
+        margin: auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    > button.close {
+        width: fit-content;
+        padding: .5rem;
+        display: flex;
+        
+        > svg {
+            font-size: 1.5rem;
+        }
+
+        @include auxil.button-icon;
+    }
+}
+
+aside#edit-profile-tab > div.container {
+    div.fields {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: .35rem;
+
+        label {
+            font-size: .9rem;
+            color: auxil.$color-text-secondary;
+        }
+    }
+
+    button.save {
+        font-size: 1.5rem;
+        @include auxil.button-accent;
+    }
+} 
+
+aside#edit-profile-tab textarea,
+aside#edit-profile-tab input {
+    @include auxil.input;
+}
+
+// EDITABLES
+
+    //Editable Social
+
+div.editable-social {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+    //Editable Avatar
+
+div.editable-avatar {
+    position: relative;
+    cursor: pointer;
+
+    > .icon {
+        padding: .3rem;
+
+        position: absolute;
+        right: -.5rem;
+        bottom: -.5rem;
+
+        display: flex;
+        
+        border-radius: 100%;
+        border: 1px auxil.$color-text-secondary solid;
+        background-color: auxil.$color-text;
+        color: auxil.$color-text-dark;
+
+        > svg {
+            font-size: 1.25rem;
+        }
+    }
+
+    div.avatar {
+        border-radius: .25rem;
+        @include auxil.avatar;
+        transition: background-color .15s linear;
+
+        &:hover {
+            background-color: darken(auxil.$color-text, 15%);
+        }
+    }
+}
+
+// LISTS 
+
+section.collecions-list {
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+
+    > .collection-message {
+        margin: 0 auto;
+        font-size: 1.5rem;
+    }
+}
+
+div.collection-item {
+    padding: 1rem .5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: auxil.$color-primary;
+    border-radius: .25rem;
+
+    > h3 {
+        font-size: clamp(1rem, 3vw, 1.5rem);
+    }
+
+    > div {
+        display: flex;
+        gap: .25rem;
+        
+        > button {
+            @include auxil.button-icon;
+
+            > svg {
+                font-size: clamp(1.25rem, 3vw, 1.25rem);
+            }
+
+            &:hover {
+                color: auxil.$color-text;
+            }
+        }
+    }
+}
