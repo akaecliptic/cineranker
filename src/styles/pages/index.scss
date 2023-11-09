@@ -1,52 +1,5 @@
 @use "../auxil";
 
-// HEADER
-
-header {
-    width: 90px;
-    height: 100%;
-
-    box-sizing: border-box;
-    padding: .5rem;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-
-    position: fixed;
-
-    button.logo {
-        @include auxil.button-icon-alt;
-    }
-
-    hr {
-        width: 100%;
-        border-color: auxil.$color-text-secondary;
-
-        &.bottom {
-            margin-top: auto;
-        }
-    }
-
-    div.button-bar {
-        width: 100%;
-        height: 100%;
-
-        display: flex;
-        flex-direction: column;
-        gap: .5rem;
-
-        button {
-            @include auxil.button-icon-alt;
-        }
-
-        button > * {
-            font-size: 1.75rem;
-        }
-    }
-}
-
 // MAIN
 
 main {

@@ -2,16 +2,16 @@
 
 import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { FaRegChartBar, FaRegUserCircle, FaUserCircle, FaUserSlash } from "react-icons/fa";
 
 import { useSupabase } from "components/auxil/SupabaseProvider";
 import Dialog from "components/ui/Dialog";
 import Logo from "components/icons/Logo";
 
 import vars from "styles/vars.module.scss";
-import { FaHome, FaRegChartBar, FaRegUserCircle, FaUserCircle, FaUserSlash } from "react-icons/fa";
+import styles from "styles/modules/Header.module.scss";
 
 const VarsCineranker = {
 	default: {
@@ -25,7 +25,6 @@ const VarsCineranker = {
 const Header: FC = () => {
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const { supabase, session, username } = useSupabase();
-	const pathname = usePathname();
 	const router = useRouter();
 
 	useEffect(() => {
@@ -56,16 +55,16 @@ const Header: FC = () => {
 				<span className='credit'>powered by supabase</span>
 			</Dialog>
 
-			<header>
+			<header className={styles.container}>
 				<button
-					className='logo'
+					className={styles.logo}
 					type='button'
 					onClick={() => router.push("/")}
 					title='home'>
 					<Logo />
 				</button>
 				<hr />
-				<div className='button-bar'>
+				<div className={styles["button-bar"]}>
 					{session ? (
 						<>
 							<button
@@ -80,7 +79,7 @@ const Header: FC = () => {
 								title='profile'>
 								<FaUserCircle />
 							</button>
-							<hr className='bottom' />
+							<hr className={styles.bottom} />
 							<button
 								type='button'
 								onClick={() => supabase.auth.signOut()}

@@ -21,7 +21,7 @@ import Toasty from "components/ui/Toasty";
 
 import type { DatabaseEntry } from "types/auxil";
 
-import styles from "styles/modules/Header.module.scss";
+import styles from "styles/modules/UserHeader.module.scss";
 
 export const HeaderFallback: FC<{}> = () => {
 	return (

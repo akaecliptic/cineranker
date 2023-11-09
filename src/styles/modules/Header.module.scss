@@ -1,123 +1,46 @@
-@use "../auxil";
+@use "../auxil.scss";
 
-header.container {
-    width: 100%;
-    max-width: 550px;
+.container {
+    width: 90px;
+    height: 100%;
 
-    padding: 0 .5rem;
-    margin: 1rem auto .5rem;
-    
-    display: flex;
-
-    > .info, > .links {
-        * {
-            display: flex;
-        }
-    }  
-}
-
-// AVATAR
-
-.avatar {
-    @include auxil.avatar;
-
-    width: 7rem;
-    height: 7rem;
-    border-radius: .25rem 0 0 .25rem;
-
-    > img {
-        width: 5rem;
-        height: 5rem;
-    }
-}
-
-// CONTENT
-.content {
-    height: 7rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-    // INFO
-
-.info {
+    box-sizing: border-box;
     padding: .5rem;
 
-    flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 
-    border-radius: 0 .25rem .25rem 0;
-    background-color: auxil.$color-primary;
+    position: fixed;
 
-    h2 {
-        letter-spacing: -1px;
-        font-size: clamp(1.25rem, 3vw, 1.5rem);
+    button.logo {
+        @include auxil.button-icon-alt;
     }
-    
-    span {
-        font-weight: auxil.$font-weight-secondary;
-        font-size: clamp(.9rem, 2vw, 1rem);
+
+    hr {
+        width: 100%;
+        border-color: auxil.$color-text-secondary;
+
+        &.bottom {
+            margin-top: auto;
+        }
     }
-}
 
-    // LINKS
+    div.button-bar {
+        width: 100%;
+        height: 100%;
 
-.links {
-    height: 2rem;
-    display: flex;
-    justify-content: space-between;
-
-    > * {
         display: flex;
-        
-        svg {
-            font-size: 1.55rem;
-        }
-    }
+        flex-direction: column;
+        gap: .5rem;
 
-    > .socials {
-        width: min-content;
-
-        padding: .2rem 1rem;
-        
-        justify-content: center;
-        gap: 1.5rem;
-        
-        border-radius: 0 0 .25rem 0;
-        background-color: auxil.$color-primary;
-
-        @include auxil.responsive(1) {
-            padding: .2rem .5rem;
-            gap: .5rem;
-        }
-    }
-
-    > .share {
-        gap: .25rem;
-        
-        > button {
+        button {
             @include auxil.button-icon-alt;
-
-            display: flex;
-            align-items: center;
         }
 
-        @include auxil.responsive(1) {
-            gap: .1rem;
-
-            > button {
-                padding: .5rem;
-            }
+        button > * {
+            font-size: 1.75rem;
         }
     }
-}
-
-
-// MISC
-
-.qrcode {
-    background-color: white;
-    padding: .5rem;
 }
