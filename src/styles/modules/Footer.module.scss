@@ -1,41 +1,22 @@
 @use "../auxil.scss";
 
 .container {
-    padding: .5rem;
+    padding: 0 1rem 1rem 0;
+
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    gap: .75rem;
     
     * {
         display: flex;
     }
 
-    .links { 
-        gap: .5rem;
-
-        > a {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: auxil.$color-text-secondary;
-        }
-
-        > a > svg {
-            font-size: 1.5rem;
-        }
-
-        > button.function {
-            @include auxil.button-icon-alt;
-
-            padding: 0;
-            color: auxil.$color-text-secondary;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-
-            &:hover {
-                color: darken(auxil.$color-text-secondary, 10%);
-            }
-            
-            &:active {
-                color: lighten(auxil.$color-text-secondary, 25%);
-            }
-        }
+    > a {
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        color: auxil.$color-text-secondary;
     }
+
+    > a > svg {
+        font-size: 1.5rem;
+    }    
 }

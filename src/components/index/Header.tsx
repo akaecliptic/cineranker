@@ -64,13 +64,8 @@ const Header: FC = () => {
 					title='home'>
 					<Logo />
 				</button>
-				<hr className='separator' />
+				<hr />
 				<div className='button-bar'>
-					{pathname !== "/" && (
-						<button type='button' onClick={() => router.push("/")} title='home'>
-							<FaHome />
-						</button>
-					)}
 					{session ? (
 						<>
 							<button
@@ -94,11 +89,9 @@ const Header: FC = () => {
 							</button>
 						</>
 					) : (
-						<>
-							<button type='button' onClick={() => setShowForm(true)} title='sign up'>
-								<FaRegUserCircle />
-							</button>
-						</>
+						<button type='button' onClick={() => setShowForm(true)} title='sign up'>
+							<FaRegUserCircle />
+						</button>
 					)}
 				</div>
 			</header>
