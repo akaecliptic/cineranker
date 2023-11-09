@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import Header from "components/index/Header";
-import Hero from "components/index/Hero";
+import Main from "components/index/Main";
 
 import "styles/pages/index.scss";
 
@@ -9,9 +9,7 @@ const IndexPage: FC = () => {
 	return (
 		<>
 			<Header />
-			<main>
-				<Hero />
-			</main>
+			<Main />
 		</>
 	);
 };
