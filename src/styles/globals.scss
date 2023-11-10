@@ -33,7 +33,9 @@ body {
 }
 
 main {
-	padding: .5rem;
+	padding: 1.5rem 90px;
+    box-sizing: border-box;
+	
 	display: flex;
 	flex-direction: column;
 	flex: 1;
