@@ -1,16 +1,27 @@
 import { FC } from "react";
 
-import Header from "components/index/Header";
-import Main from "components/index/Main";
+import Welcome from "components/icons/Welcome";
+import Card from "components/index/Card";
 
 import "styles/pages/index.scss";
 
 const IndexPage: FC = () => {
 	return (
-		<>
-			<Header />
-			<Main />
-		</>
+		<main>
+			<Welcome />
+			<section className='cards'>
+				<Card title='List' />
+				<Card title='Rank' />
+				<Card title='Share' />
+			</section>
+			<section className='mantra'>
+				<h5>And remember</h5>
+				<div>
+					<h2>Don’t judge a book by it’s cover</h2>
+					<h2>Always judge someone for their taste in movies</h2>
+				</div>
+			</section>
+		</main>
 	);
 };
 

@@ -3,6 +3,7 @@ import { headers, cookies } from "next/headers";
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 import Footer from "components/common/Footer";
+import Header from "components/common/Header";
 import SupabaseProvider from "components/auxil/SupabaseProvider";
 
 import type { FunctionalLayout } from "types/react";
@@ -25,6 +26,7 @@ const RootLayout: FunctionalLayout = async ({ children }) => {
 		<html lang='en'>
 			<body>
 				<SupabaseProvider session={data.session}>
+					<Header />
 					<>{children}</>
 					<Footer />
 				</SupabaseProvider>
