@@ -3,8 +3,6 @@
 import { FC, useMemo, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import Dialog from "components/ui/Dialog";
-
 import styles from "styles/modules/Card.module.scss";
 import Movie from "components/user/Movie";
 
@@ -25,7 +23,6 @@ export type PropCard = {
 
 const Card: FC<PropCard> = ({ data }) => {
 	const [active, setActive] = useState<number>(0);
-	const [showPicker, setShowPicker] = useState<boolean>(false);
 
 	const lists = useMemo<[string, DatabaseEntry<"Movies">[]][]>(() => {
 		const map: Map<string, DatabaseEntry<"Movies">[]> = new Map();
@@ -60,51 +57,38 @@ const Card: FC<PropCard> = ({ data }) => {
 		}
 	};
 
-	/*
-		Ripped out the reaction related code, to implement at a later date.
-		Felt clunky and needs proper testing framework in place.
-	*/
-
 	return (
-		<>
-			<Dialog show={showPicker} onClose={() => setShowPicker(false)}>
-				<div id='reactionPicker' />
-				<span className='credit'>powered by picmo</span>
-			</Dialog>
-
-			{/* UI Listeners ^^ */}
-
-			<div className={styles.container}>
-				<div className={styles.head}>
-					<button onClick={() => updateActive(true)} type='button' title='scroll-left'>
-						<FaChevronLeft />
-					</button>
-					<div className={styles.heading}>
-						<h1 className={styles.title}>
-							{lists.length === 0 ? "No lists created" : lists[active][0]}
-						</h1>
-						<div className={styles.dots}>
-							{lists.map((list, index) => (
-								<Dot key={list[0]} active={index === active} />
-							))}
-						</div>
+		<div className={styles.container}>
+			<div className={styles.head}>
+				<button onClick={() => updateActive(true)} type='button' title='scroll-left'>
+					<FaChevronLeft />
+				</button>
+				<div className={styles.heading}>
+					<h1 className={styles.title}>
+						{lists.length === 0 ? "No lists created" : lists[active][0]}
+					</h1>
+					<div className={styles.dots}>
+						{lists.map((list, index) => (
+							<Dot key={list[0]} active={index === active} />
+						))}
 					</div>
-					<button onClick={() => updateActive()} type='button' title='scroll-right'>
-						<FaChevronRight />
-					</button>
 				</div>
-				<div id='listContainer' className={styles.body}>
-					{lists.map((list) => (
-						<div key={list[0]} className={styles.list}>
+				<button onClick={() => updateActive()} type='button' title='scroll-right'>
+					<FaChevronRight />
+				</button>
+			</div>
+			<div id='listContainer' className={styles.body}>
+				{lists.map((list) => (
+					<div key={list[0]} className={styles.list}>
+						<div className={styles.grid}>
 							{list[1].map((movie, index) => (
 								<Movie key={movie.tmdb_id} place={index + 1} movie={movie} />
 							))}
 						</div>
-					))}
-				</div>
-				<div className={styles.foot}>{/* Reaction code goes here */}</div>
+					</div>
+				))}
 			</div>
-		</>
+		</div>
 	);
 };
 

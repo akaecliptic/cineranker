@@ -5,9 +5,6 @@
     max-width: 750px;
     height: 100%;
 
-    margin: 2rem auto;
-    padding: 1rem .5rem;
-
     display: flex;
     flex-direction: column;
 
@@ -71,8 +68,8 @@
     }
 
     > .dot.active {
-        width: 1rem;
-        background-color: auxil.$color-primary;
+        width: 1.5rem;
+        background-color: auxil.$color-accent;
     }
 }
 
@@ -90,65 +87,20 @@
     
     .list {
         width: 100%;
-        
-        margin: auto;
-        padding: 1rem .25rem;
 
-        display: flex;
-        flex-direction: column;
-        gap: .25rem;
+        padding: 2rem 0 0 0;
         
+        display: flex;
+        justify-content: center;
+
         flex-shrink: 0;
         scroll-snap-align: start;
-    }
-}
 
-// FOOT
-
-.foot {
-    width: 100%;
-    padding: .2rem 2rem;
-    justify-content: space-between;
-
-    > button {
-        @include auxil.button-icon-alt;
-
-        > svg {
-            font-size: 1.5rem;
+        .grid {   
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: min-content;
+            gap: 1.5rem;
         }
-    }
-}
-    //REACTION
-
-.reactions {
-    display: flex;
-    flex: 1;
-    gap: .1rem;
-}
-
-.reaction {
-    display: flex;
-    align-items: center;
-    gap: .25rem;
-
-    background-color: lighten(auxil.$color-dark, 10%);
-
-    cursor: pointer;
-    transition: background-color .15s linear;
-    
-    &:hover {
-        background-color: lighten(auxil.$color-dark, 15%);
-    }
-    
-    &:active {
-        background-color: lighten(auxil.$color-dark, 20%);
-    }
-
-    > img {
-        filter: drop-shadow(0 0 1px auxil.$color-text-secondary);
-    }
-
-    > span {
-        font-size: 1rem;
     }
 }

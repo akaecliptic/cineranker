@@ -1,69 +1,58 @@
 @use "../auxil.scss";
 
+$poster-width: 150px;
+$poser-heigth: 210px;
+
 .container {
-    width: 100%;
+    width: $poster-width;
+    height: $poser-heigth;
 
-    padding: .5rem .75rem;
-
-    display: flex;
-    align-items: center;
-
+    position: relative;
     border-radius: .25rem;
     background-color: black;
 
-    * {
+    .rank {
+        width: 40px;
+        height: 40px;
+
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        
         display: flex;
-    }
+        justify-content: center;
+        align-items: center;
+        
+        background-color: auxil.$color-primary;
+        border-radius: 100%;
 
-    h2 {
-        font-size: clamp(1rem, 3vw, 1.5rem);
-    }
-    
-    h4 {
-        font-size: clamp(.75rem, 3vw, 1.25rem);
-    }
-
-    .poster {
-        width: clamp(50px, 10vw, 70px);
-        height: clamp(70px, 15vw, 105px);
         user-select: none;
     }
-}
 
-.rank {
-    width: 40px;
-    height: 100%;
-    padding-right: .5rem;
-    justify-content: center;
-    user-select: none;
-}
-
-.data {
-    flex: 1;
-    align-self: flex-end;
-    align-items: flex-start;
-    flex-direction: column;
-    margin: .2rem;
-}
-
-.logos {
-    gap: .5rem;
-
-    .logo {
-        width: 4rem;
-        height: 2rem;
+    img.poster {
+        width: $poster-width;
+        height: $poser-heigth;
         user-select: none;
-        cursor: pointer;
+        border-radius: .25rem;
     }
 
-    @include auxil.responsive(1) {
-        flex-direction: column;
-        align-self: center;
-        gap: .5rem;
+    div.data {
+        width: $poster-width;
 
-        .logo {
-            width: 3rem;
-            height: 1.5rem;
+        padding: 0 .2rem .2rem .2rem;
+
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        background: linear-gradient(rgba(0, 0, 0, 0), black);
+
+        h2 {
+            font-size: 1rem;
+        }
+        
+        h4 {
+            font-size: .75rem;
         }
     }
 }
