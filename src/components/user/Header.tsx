@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
 import {
+	FaChevronLeft,
 	FaExternalLinkAlt,
 	FaGithub,
 	FaInstagram,
@@ -11,6 +12,7 @@ import {
 	FaQrcode,
 	FaSpinner,
 	FaTiktok,
+	FaTimes,
 	FaTwitter,
 	FaYoutube,
 } from "react-icons/fa";
@@ -18,7 +20,6 @@ import { QRCodeSVG } from "qrcode.react";
 
 import { useSupabase } from "components/auxil/SupabaseProvider";
 import Twemoji from "components/icons/Twemoji";
-import Dialog from "components/ui/Dialog";
 import Toasty from "components/ui/Toasty";
 
 import type { DatabaseEntry } from "types/auxil";
@@ -28,26 +29,10 @@ import styles from "styles/modules/UserHeader.module.scss";
 const HeaderLoading: FC<{}> = () => {
 	return (
 		<header className={styles.container}>
-			<div className={styles.avatar}></div>
-			<div className={styles.content}>
-				<div className={styles.info}>
-					<h2>loading...</h2>
-					<span></span>
-				</div>
-				<div className={styles.links}>
-					<div className={styles.socials}>
-						<FaSpinner />
-					</div>
-					<div className={styles.share}>
-						<button type='button' title='loading...' disabled>
-							<FaLink />
-						</button>
-						<button type='button' title='loading...' disabled>
-							<FaQrcode />
-						</button>
-					</div>
-				</div>
-			</div>
+			<button type='button' title='open profile tab' className={styles.trigger}>
+				<FaChevronLeft />
+				<Twemoji emoji='⏳' />
+			</button>
 		</header>
 	);
 };
@@ -57,9 +42,9 @@ const Header: FC<{}> = () => {
 	const params = useParams();
 
 	const [profile, setProfile] = useState<DatabaseEntry<"Profiles">>();
-	const [showQr, setShowQr] = useState<boolean>(false);
 	const [linkCopied, setLinkCopied] = useState<boolean>(false);
 	const [location, setLocation] = useState<string>("");
+	const [openTab, setOpenTab] = useState<boolean>(false);
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(location);
@@ -125,11 +110,6 @@ const Header: FC<{}> = () => {
 
 	return (
 		<>
-			<Dialog show={showQr} onClose={() => setShowQr(false)}>
-				<span className='heading'>{`${profile.username}'s profile`}</span>
-				<QRCodeSVG value={location} width={250} height={250} className={styles.qrcode} />
-				<span className='credit'>powered by qrcode.react</span>
-			</Dialog>
 			<Toasty
 				message='Link copied to clipboard'
 				mode={linkCopied ? "short" : "hidden"}
@@ -139,33 +119,48 @@ const Header: FC<{}> = () => {
 			{/* UI Listeners ^^ */}
 
 			<header className={styles.container}>
-				<div className={styles.avatar}>
-					<Twemoji emoji={profile.avatar || "🙂"} />
-				</div>
-				<div className={styles.content}>
-					<div className={styles.info}>
-						<h2>{profile.username}</h2>
-						<span>{profile.flavour}</span>
-					</div>
-					<div className={styles.links}>
-						<div className={styles.socials}>{showLinks()}</div>
-						<div className={styles.share}>
-							<button
-								type='button'
-								title='copy link to clipboard'
-								onClick={copyToClipboard}>
-								<FaLink />
-							</button>
-							<button
-								type='button'
-								title='qrcode generator'
-								onClick={() => setShowQr(true)}>
-								<FaQrcode />
-							</button>
-						</div>
-					</div>
-				</div>
+				{!openTab && (
+					<button
+						type='button'
+						title='open profile tab'
+						className={styles.trigger}
+						onClick={() => setOpenTab(!openTab)}>
+						<FaChevronLeft />
+						<Twemoji emoji={profile.avatar} />
+					</button>
+				)}
 			</header>
+
+			<aside className={`${styles.container} ${openTab ? styles.open : ""}`}>
+				<button
+					type='reset'
+					className={styles.close}
+					title='close'
+					onClick={() => setOpenTab(false)}>
+					<FaTimes />
+				</button>
+				<div className={styles.info}>
+					<Twemoji emoji={profile.avatar || "🙂"} />
+					<h2>{profile.username}</h2>
+					<span>{profile.flavour}</span>
+				</div>
+				<hr className={styles.break} />
+				<div className={styles.share}>
+					<div className={styles.socials}>{showLinks()}</div>
+					<div
+						title='qrcode for this page, click to copy to clipboard'
+						className={styles.qrcode}
+						onClick={copyToClipboard}>
+						<QRCodeSVG
+							value={location}
+							width={250}
+							height={250}
+							className={styles.qrcode}
+						/>
+					</div>
+					<span className='credit'>powered by qrcode.react</span>
+				</div>
+			</aside>
 		</>
 	);
 };

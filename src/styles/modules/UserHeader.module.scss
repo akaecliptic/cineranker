@@ -1,55 +1,106 @@
 @use "../auxil";
 
+// HEADER
 header.container {
-    width: 100%;
-    max-width: 550px;
-
-    padding: 0 .5rem;
-    margin: 1rem auto .5rem;
-    
-    display: flex;
-
-    > .info, > .links {
-        * {
-            display: flex;
-        }
-    }  
+    position: absolute;
+    right: 1rem;
 }
 
-// AVATAR
+button.trigger {
+    width: 3.5rem;
+    height: 3.5rem;
 
-.avatar {
-    @include auxil.avatar;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    width: 7rem;
-    height: 7rem;
-    border-radius: .25rem 0 0 .25rem;
+    border-radius: 100%;
+
+    @include auxil.button-accent;
+
+    &:hover > svg {
+        opacity: 1;
+        right: 3.5rem;
+    }
+
+    > svg {
+        position: absolute;
+        right: 2.5rem;
+        
+        opacity: 0;
+
+        font-size: 2rem;
+        transition: all .15s linear;
+    }
 
     > img {
-        width: 5rem;
-        height: 5rem;
+        width: 2rem;
+        height: 2rem;
+        margin: auto;
+        display: flex;
     }
 }
 
-// CONTENT
-.content {
-    height: 7rem;
+// ASIDE PANEL
+aside.container {
+    width: 35%;
+    height: 95%;
+
+    overflow: hidden;
+
+    z-index: auxil.$level-floating;
+    position: absolute;
+    right: 1rem;
+    bottom: 50%;
+    transform: translateY(50%);
+    
     display: flex;
     flex-direction: column;
-    flex: 1;
+    align-items: center;
+
+    opacity: 0;
+    visibility: hidden;
+    background-color: auxil.$color-primary;
+    border-radius: .5rem;
+
+    transition: all .1s ease-in-out;
+
+    &.open {
+        width: 45%;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    > .info, > .share {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    > button.close {
+        width: min-content;
+
+        position: absolute;
+        left: 0;
+        
+        padding: .5rem;
+        display: flex;
+        
+        > svg {
+            font-size: 1.5rem;
+        }
+
+        @include auxil.button-icon;
+    }
 }
 
-    // INFO
-
+//INFO
 .info {
-    padding: .5rem;
+    height: min-content;
 
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    border-radius: 0 .25rem .25rem 0;
-    background-color: auxil.$color-primary;
+    padding: 2rem;
+    
+    align-items: center;
+    gap: .5rem;
 
     h2 {
         letter-spacing: -1px;
@@ -60,64 +111,49 @@ header.container {
         font-weight: auxil.$font-weight-secondary;
         font-size: clamp(.9rem, 2vw, 1rem);
     }
+
+    > img {
+        width: 5rem;
+        height: 5rem;
+    }
 }
 
-    // LINKS
+// BREAK
+hr.break {
+    width: 55%;
+    border: 1px solid auxil.$color-text;
+}
 
-.links {
-    height: 2rem;
-    display: flex;
-    justify-content: space-between;
+// CONTENT
+.share {
+    flex: 1;
+    align-items: center;
+    padding: 2rem 0 3rem 0;
 
     > * {
         display: flex;
         
         svg {
-            font-size: 1.55rem;
+            font-size: 2rem;
         }
     }
 
     > .socials {
-        width: min-content;
-
-        padding: .2rem 1rem;
-        
         justify-content: center;
-        gap: 1.5rem;
-        
-        border-radius: 0 0 .25rem 0;
-        background-color: auxil.$color-primary;
+        gap: 1.25rem;
 
         @include auxil.responsive(1) {
             padding: .2rem .5rem;
             gap: .5rem;
         }
     }
-
-    > .share {
-        gap: .25rem;
-        
-        > button {
-            @include auxil.button-icon-alt;
-
-            display: flex;
-            align-items: center;
-        }
-
-        @include auxil.responsive(1) {
-            gap: .1rem;
-
-            > button {
-                padding: .5rem;
-            }
-        }
-    }
 }
-
 
 // MISC
 
 .qrcode {
-    background-color: white;
     padding: .5rem;
+    margin-top: auto;
+    background-color: white;
+    border-radius: .5rem;
 }

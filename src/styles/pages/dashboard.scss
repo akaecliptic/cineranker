@@ -23,12 +23,12 @@ button#open-edit-tab {
 
     &:hover > svg {
         opacity: 1;
-        left: 4rem;
+        left: 3.5rem;
     }
 
     > svg {
         position: absolute;
-        left: 2rem;
+        left: 2.5rem;
         
         opacity: 0;
 
@@ -73,7 +73,7 @@ aside#edit-profile-tab {
     visibility: hidden;
     background-color: auxil.$color-dark;
 
-    transition: all .25s ease-in-out;
+    transition: all .1s ease-in-out;
 
     &.open {
         left: 0;
@@ -94,7 +94,7 @@ aside#edit-profile-tab {
     }
 
     > button.close {
-        width: fit-content;
+        width: min-content;
         padding: .5rem;
         display: flex;
         
