@@ -40,7 +40,7 @@ const CreateList: FC<PropCreateList> = ({ count }) => {
 			return;
 		}
 
-		router.push(`/editor/list/${data._id}`);
+		router.push(`/list/${data._id}`);
 	};
 
 	return (
