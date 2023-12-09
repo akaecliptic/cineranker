@@ -3,7 +3,7 @@
 // TOP
 
 header.top {
-    position: absolute;
+    position: fixed;
     right: 1rem;
 }
 
@@ -180,11 +180,10 @@ section.collecions-list {
     width: 100%;
     max-width: 750px;
 
-    margin: auto;
+    margin: 5rem auto 0;
     
     display: flex;
     flex-direction: column;
-    gap: .25rem;
 
     > .collection-message {
         margin: 0 auto;
@@ -193,20 +192,25 @@ section.collecions-list {
 }
 
 div.collection-item {
-    padding: 1rem .5rem;
+    padding: 1.5rem .5rem 1.5rem 1rem;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    background-color: auxil.$color-primary;
     border-radius: .25rem;
 
-    > h3 {
-        font-size: clamp(1rem, 3vw, 1.5rem);
+    &:hover {
+        background-color: rgba(white, .05);
     }
 
-    > div {
+    > div.collection-item-info {
+        > h3 {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+        }
+    }
+
+    > div.collection-item-buttons {
         display: flex;
         gap: .25rem;
         
@@ -221,5 +225,25 @@ div.collection-item {
                 color: auxil.$color-text;
             }
         }
+    }
+}
+
+// CREATE LIST
+button#create-list {
+    width: 3rem;
+    height: 3rem;
+
+    display: grid;
+    place-content: center;
+    align-self: center;
+    
+    margin: auto 0 3rem;
+
+    border-radius: 100%;
+
+    @include auxil.button-accent;
+
+    svg {
+        font-size: 1.5rem;
     }
 }

@@ -1,12 +1,11 @@
 "use client";
 
-import { FC, useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
-import Link from "next/link";
+import { FC, useState, useEffect } from "react";
+import { FaChevronLeft, FaTimes } from "react-icons/fa";
+import { notFound } from "next/navigation";
 
 import Toasty from "components/ui/Toasty";
 import Twemoji from "components/icons/Twemoji";
-import CreateList, { CreateListFallback } from "components/dashboard/CreateList";
 import EditableAvatar from "components/dashboard/EditableAvatar";
 import EditableSocial from "components/dashboard/EditableSocial";
 import { useSupabase } from "components/auxil/SupabaseProvider";
@@ -15,13 +14,12 @@ import type { DatabaseEntry, ToastyPayload } from "types/auxil";
 
 type ProfileKey = Exclude<keyof DatabaseEntry<"Profiles">, "links">;
 
-export const HeaderFallback: FC = () => {
+const HeaderLoading: FC = () => {
 	return (
 		<header className='top'>
 			<button id='open-edit-tab' type='button' title='loading profile...'>
 				<Twemoji emoji='⏳' />
 			</button>
-			<CreateListFallback />
 		</header>
 	);
 };
@@ -35,21 +33,16 @@ const dummyProfile: DatabaseEntry<"Profiles"> = {
 	links: ["", "", ""],
 };
 
-export type PropHeader = {
-	initial: DatabaseEntry<"Profiles"> | null;
-	count: number;
-};
-
-const Header: FC<PropHeader> = ({ initial, count }) => {
+const Header: FC<{}> = () => {
 	const [openTab, setOpenTab] = useState<boolean>(false);
-	const [profile, setProfile] = useState<DatabaseEntry<"Profiles">>(initial || dummyProfile);
+	const [profile, setProfile] = useState<DatabaseEntry<"Profiles">>();
 	const [links, setLinks] = useState<string[]>(dummyProfile.links!);
 	const [payload, setPayload] = useState<ToastyPayload>([null, "info"]);
 
 	const { supabase, session } = useSupabase();
 
 	const saveProfile = async () => {
-		if (session === null) return;
+		if (session === null || !profile) return;
 
 		if (profile.username.replace(/\s/g, "") === "") {
 			setPayload(() => ["Invalid 'username'", "alert"]);
@@ -91,6 +84,29 @@ const Header: FC<PropHeader> = ({ initial, count }) => {
 			return old;
 		});
 	};
+
+	useEffect(() => {
+		if (!session) return;
+		(async () => {
+			const { data, error } = await supabase
+				.from("Profiles")
+				.select("*")
+				.eq("user_id", session.user.id)
+				.single();
+
+			if (error) {
+				console.error("There was an error fetching user: '%s'", error.message);
+				notFound();
+			} else if (!data) {
+				console.error("User could not be found, redirecting to home page");
+				notFound();
+			}
+
+			setProfile(data);
+		})();
+	}, [supabase, session]);
+
+	if (!profile) return <HeaderLoading />;
 
 	return (
 		<>
