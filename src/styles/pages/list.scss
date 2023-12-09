@@ -179,7 +179,8 @@ div.list-item > div.content {
 
 // HEADER 
 
-header {
+header.editor {
+    width: 100%;
     padding: 1rem 0 .5rem;
     display: flex;
     justify-content: center;
@@ -195,8 +196,7 @@ header {
         
         font-size: 1.25rem;
         color: auxil.$color-text;
-        background-color: auxil.$color-card;
-        
+        background-color: rgba(auxil.$color-text, .1);
     }
 }
 

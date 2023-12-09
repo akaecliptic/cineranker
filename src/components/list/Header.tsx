@@ -15,7 +15,7 @@ const Header: FC = () => {
 	const { title, setTitle } = useEditor();
 
 	return (
-		<header>
+		<header className='editor'>
 			<input
 				type='text'
 				title='title'

@@ -16,7 +16,7 @@ type ProfileKey = Exclude<keyof DatabaseEntry<"Profiles">, "links">;
 
 const HeaderLoading: FC = () => {
 	return (
-		<header className='top'>
+		<header className='dashboard'>
 			<button id='open-edit-tab' type='button' title='loading profile...'>
 				<Twemoji emoji='⏳' />
 			</button>
@@ -117,7 +117,7 @@ const Header: FC<{}> = () => {
 				onClose={() => setPayload([null, "info"])}
 			/>
 
-			<header className='top'>
+			<header className='dashboard'>
 				<button
 					id='open-edit-tab'
 					type='button'
