@@ -17,7 +17,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11",
-    "moviedb-promise": "^3.4.0",
+    "moviedb-promise": "^4.0.3",
     "next": "^13.4.2",
     "picmo": "^5.8.4",
     "qrcode.react": "^3.1.0",
