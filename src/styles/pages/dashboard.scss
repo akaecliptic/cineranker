@@ -3,10 +3,8 @@
 // TOP
 
 header.top {
-    padding: .5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: absolute;
+    right: 1rem;
 }
 
 button#open-edit-tab {
@@ -23,12 +21,12 @@ button#open-edit-tab {
 
     &:hover > svg {
         opacity: 1;
-        left: 3.5rem;
+        right: 3.5rem;
     }
 
     > svg {
         position: absolute;
-        left: 2.5rem;
+        right: 2.5rem;
         
         opacity: 0;
 
@@ -57,7 +55,7 @@ header.top > div.action-buttons {
 // EDIT PROFILE TAB
 
 aside#edit-profile-tab {
-    width: 100%;
+    width: 90%;
     height: 100%;
 
     padding: 1rem;
@@ -66,7 +64,7 @@ aside#edit-profile-tab {
     flex-direction: column;
 
     position: absolute;
-    left: -100vw;
+    right: 0;
     top: 0;
 
     opacity: 0;
@@ -76,7 +74,7 @@ aside#edit-profile-tab {
     transition: all .1s ease-in-out;
 
     &.open {
-        left: 0;
+        width: 100%;
         opacity: 1;
         visibility: visible;
     }

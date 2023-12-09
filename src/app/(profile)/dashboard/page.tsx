@@ -74,8 +74,8 @@ const DashboardPage: FC = async () => {
 
 	return (
 		<>
-			<Header initial={profile} count={count} />
 			<main>
+				<Header initial={profile} count={count} />
 				<Lists lists={lists} />
 			</main>
 		</>

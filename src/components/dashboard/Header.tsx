@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { FaChevronRight, FaTimes } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
 import Link from "next/link";
 
 import Toasty from "components/ui/Toasty";
@@ -107,18 +107,9 @@ const Header: FC<PropHeader> = ({ initial, count }) => {
 					type='button'
 					title='open profile tab'
 					onClick={() => setOpenTab(true)}>
-					<FaChevronRight />
+					<FaChevronLeft />
 					<Twemoji emoji={profile.avatar!} />
 				</button>
-
-				<div className='action-buttons'>
-					<Link href={`/${profile.username}`}>
-						<button type='button' title='user profile'>
-							profile
-						</button>
-					</Link>
-					<CreateList count={count} />
-				</div>
 			</header>
 
 			<aside id='edit-profile-tab' className={openTab ? "open" : ""}>
