@@ -1,14 +1,17 @@
 "use client";
 
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { notFound, useParams } from "next/navigation";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import styles from "styles/modules/Card.module.scss";
+import { useSupabase } from "components/auxil/SupabaseProvider";
 import Movie from "components/user/Movie";
 
 import type { DatabaseEntry, DatabaseView } from "types/auxil";
 
-export type PropDot = {
+import styles from "styles/modules/Card.module.scss";
+
+type PropDot = {
 	active?: boolean;
 };
 
@@ -17,28 +20,12 @@ const Dot: FC<PropDot> = ({ active }) => {
 	return <div className={styleClass}></div>;
 };
 
-export type PropCard = {
-	data: DatabaseView[];
-};
+const Card: FC<{}> = () => {
+	const { supabase } = useSupabase();
+	const params = useParams();
 
-const Card: FC<PropCard> = ({ data }) => {
+	const [lists, setLists] = useState<[string, DatabaseEntry<"Movies">[]][]>([]);
 	const [active, setActive] = useState<number>(0);
-
-	const lists = useMemo<[string, DatabaseEntry<"Movies">[]][]>(() => {
-		const map: Map<string, DatabaseEntry<"Movies">[]> = new Map();
-
-		data.forEach((item) => {
-			if (item.list === null) return;
-
-			if (map.has(item.list)) {
-				map.get(item.list)?.push(item as DatabaseEntry<"Movies">);
-			} else {
-				map.set(item.list, [item as DatabaseEntry<"Movies">]);
-			}
-		});
-
-		return Array.from(map.entries());
-	}, [data]);
 
 	const updateActive = (left?: boolean): void => {
 		if (lists.length === 0) return;
@@ -57,6 +44,43 @@ const Card: FC<PropCard> = ({ data }) => {
 		}
 	};
 
+	useEffect(() => {
+		(async () => {
+			const { data, error } = await supabase
+				.from("list_data")
+				.select("*, Profiles!inner()")
+				.eq("Profiles.username", params.user)
+				.order("rank");
+
+			if (error) {
+				console.error("There was an error fetching user: '%s'", error.message);
+				notFound();
+			} else if (data === null) {
+				console.warn(`User '${params.user}' could not be found.`);
+				notFound();
+			} else if (data.length > 0 && !("list" in data[0])) {
+				console.warn("No confidence in data quality, returning empty data");
+				setLists([]);
+				return;
+			}
+
+			const santisedData = data as unknown as DatabaseView[];
+			const map: Map<string, DatabaseEntry<"Movies">[]> = new Map();
+
+			santisedData.forEach((item) => {
+				if (item.list === null) return;
+
+				if (map.has(item.list)) {
+					map.get(item.list)?.push(item as DatabaseEntry<"Movies">);
+				} else {
+					map.set(item.list, [item as DatabaseEntry<"Movies">]);
+				}
+			});
+
+			setLists(Array.from(map.entries()));
+		})();
+	}, [supabase, params.user]);
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.head}>
@@ -64,9 +88,7 @@ const Card: FC<PropCard> = ({ data }) => {
 					<FaChevronLeft />
 				</button>
 				<div className={styles.heading}>
-					<h1 className={styles.title}>
-						{lists.length === 0 ? "No lists created" : lists[active][0]}
-					</h1>
+					<h1 className={styles.title}>{lists.length === 0 ? "" : lists[active][0]}</h1>
 					<div className={styles.dots}>
 						{lists.map((list, index) => (
 							<Dot key={list[0]} active={index === active} />

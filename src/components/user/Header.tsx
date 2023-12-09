@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
+import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
 import {
 	FaExternalLinkAlt,
@@ -15,6 +16,7 @@ import {
 } from "react-icons/fa";
 import { QRCodeSVG } from "qrcode.react";
 
+import { useSupabase } from "components/auxil/SupabaseProvider";
 import Twemoji from "components/icons/Twemoji";
 import Dialog from "components/ui/Dialog";
 import Toasty from "components/ui/Toasty";
@@ -23,7 +25,7 @@ import type { DatabaseEntry } from "types/auxil";
 
 import styles from "styles/modules/UserHeader.module.scss";
 
-export const HeaderFallback: FC<{}> = () => {
+const HeaderLoading: FC<{}> = () => {
 	return (
 		<header className={styles.container}>
 			<div className={styles.avatar}></div>
@@ -50,11 +52,11 @@ export const HeaderFallback: FC<{}> = () => {
 	);
 };
 
-export type PropHeader = {
-	profile: DatabaseEntry<"Profiles">;
-};
+const Header: FC<{}> = () => {
+	const { supabase } = useSupabase();
+	const params = useParams();
 
-const Header: FC<PropHeader> = ({ profile }) => {
+	const [profile, setProfile] = useState<DatabaseEntry<"Profiles">>();
 	const [showQr, setShowQr] = useState<boolean>(false);
 	const [linkCopied, setLinkCopied] = useState<boolean>(false);
 	const [location, setLocation] = useState<string>("");
@@ -66,7 +68,7 @@ const Header: FC<PropHeader> = ({ profile }) => {
 
 	const showLinks = (): JSX.Element[] => {
 		const elements: JSX.Element[] = [];
-		const links = profile.links || [];
+		const links = profile ? profile.links || [] : [];
 
 		for (let i = 0; i < links.length; i++) {
 			elements.push(
@@ -96,8 +98,30 @@ const Header: FC<PropHeader> = ({ profile }) => {
 	};
 
 	useEffect(() => {
+		(async () => {
+			const { data, error } = await supabase
+				.from("Profiles")
+				.select()
+				.eq("username", params.user)
+				.single();
+
+			if (error) {
+				console.error("There was an error fetching user: '%s'", error.message);
+				notFound();
+			} else if (data === null) {
+				console.warn(`User '${params.user}' could not be found.`);
+				notFound();
+			}
+
+			setProfile(data);
+		})();
+	}, [supabase, params.user]);
+
+	useEffect(() => {
 		setLocation(window.location.href);
 	}, []);
+
+	if (!profile) return <HeaderLoading />;
 
 	return (
 		<>
