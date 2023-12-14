@@ -10,7 +10,6 @@ import type { Database } from "types/supabase";
 type SupabaseContext = {
 	supabase: SupabaseClient<Database>;
 	session: Session | null;
-	username: string | null;
 };
 
 type PropSupabaseProvider = {
@@ -21,33 +20,7 @@ const Context = createContext<SupabaseContext | undefined>(undefined);
 
 const SupabaseProvider: FC<PropsWithChildren<PropSupabaseProvider>> = ({ children, session }) => {
 	const [supabase] = useState(() => createBrowserSupabaseClient());
-	const [username, setUsername] = useState<string | null>(null);
 	const router = useRouter();
-
-	useEffect(() => {
-		(async () => {
-			if (username !== null) return;
-
-			if (session === null) {
-				setUsername(null);
-				return;
-			}
-
-			const { data, error } = await supabase
-				.from("Profiles")
-				.select("username")
-				.eq("user_id", session.user.id)
-				.single();
-
-			if (error) {
-				console.error("Error navigating to user profile, with code:", error.code);
-				setUsername(null);
-				return;
-			}
-
-			setUsername(data.username);
-		})();
-	}, [supabase, session, username]);
 
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange(() => {
@@ -60,7 +33,7 @@ const SupabaseProvider: FC<PropsWithChildren<PropSupabaseProvider>> = ({ childre
 	}, [router, supabase]);
 
 	return (
-		<Context.Provider value={{ supabase, session, username }}>
+		<Context.Provider value={{ supabase, session }}>
 			<>{children}</>
 		</Context.Provider>
 	);

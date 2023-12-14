@@ -23,9 +23,36 @@ const VarsCineranker = {
 };
 
 const Header: FC = () => {
-	const [showForm, setShowForm] = useState<boolean>(false);
-	const { supabase, session, username } = useSupabase();
+	const { supabase, session } = useSupabase();
 	const router = useRouter();
+	const [showForm, setShowForm] = useState<boolean>(false);
+	const [username, setUsername] = useState<string>();
+
+	useEffect(() => {
+		if (!session) {
+			setUsername("");
+			return;
+		}
+
+		supabase
+			.from("Profiles")
+			.select("username")
+			.eq("user_id", session.user.id)
+			.single()
+			.then((response) => {
+				if (response.error) {
+					console.error("Error querying username, with code:", response.error.code);
+					setUsername("");
+					return;
+				} else if (!response.data) {
+					console.warn("No confidence result, querying username for current session");
+					setUsername("");
+					return;
+				}
+
+				setUsername(response.data.username);
+			});
+	}, [supabase, session]);
 
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange(() => {
@@ -70,13 +97,13 @@ const Header: FC = () => {
 							<button
 								type='button'
 								onClick={() => router.push(`/${username}`)}
-								title='your list'>
+								title='your rankings'>
 								<FaRegChartBar />
 							</button>
 							<button
 								type='button'
 								onClick={() => router.push(`/dashboard`)}
-								title='profile'>
+								title='your dashboard'>
 								<FaUserCircle />
 							</button>
 							<hr className={styles.bottom} />
