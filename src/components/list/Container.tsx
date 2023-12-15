@@ -1,14 +1,18 @@
 "use client";
 
-import { DragEventHandler, FC, MouseEventHandler } from "react";
-import Image from "next/image";
-import { FaCaretDown, FaCaretUp } from "react-icons/fa";
-
-import { useEditor } from "components/auxil/ListEditorProvider";
+import { DragEventHandler, FC, useEffect, useState } from "react";
 
 import type { DatabaseEntry } from "types/auxil";
 
-export const ContainerFallback: FC = () => {
+import { useListMutator } from "hooks/useListMutator";
+import { useEditor } from "components/auxil/ListEditorProvider";
+import { useSupabase } from "components/auxil/SupabaseProvider";
+
+import DialogAddMovie from "components/list/DialogAddMovie";
+import ButtonBar from "components/list/ButtonBar";
+import ListItem from "components/list/ListItem";
+
+const ContainerLoading: FC = () => {
 	return (
 		<section className='container-items'>
 			<span className='container-items-message'>Loading...</span>
@@ -16,80 +20,18 @@ export const ContainerFallback: FC = () => {
 	);
 };
 
-export type PropItem = {
-	movie: DatabaseEntry<"Movies">;
-	position: number;
-	last?: boolean;
-	mover: (self: DatabaseEntry<"Movies">, position: number, direction: 1 | -1) => void;
-	select: (self: DatabaseEntry<"Movies">, element: HTMLDivElement) => void;
-};
-
-const Item: FC<PropItem> = ({ movie, position, last, mover, select }) => {
-	const sanitiseClick: MouseEventHandler<HTMLDivElement> = (event) => {
-		if (event.target instanceof HTMLButtonElement) return;
-		select(movie, event.currentTarget as HTMLDivElement);
-	};
-
-	return (
-		<div
-			data-position={position}
-			className='list-item'
-			draggable
-			onClick={sanitiseClick}
-			onDragStart={(event) => event.dataTransfer.setData("movie", JSON.stringify(movie))}>
-			<div
-				className='floater top'
-				onDragEnter={(event) => event.currentTarget.classList.add("hover")}
-				onDragLeave={(event) => event.currentTarget.classList.remove("hover")}>
-				{position != 0 && (
-					<button
-						type='button'
-						title='movie item up'
-						onClick={() => mover(movie, position, 1)}>
-						<FaCaretUp />
-					</button>
-				)}
-			</div>
-			<div
-				className='floater bottom'
-				onDragEnter={(event) => event.currentTarget.classList.add("hover")}
-				onDragLeave={(event) => event.currentTarget.classList.remove("hover")}>
-				{!last && (
-					<button
-						type='button'
-						title='movie item down'
-						onClick={() => mover(movie, position, -1)}>
-						<FaCaretDown />
-					</button>
-				)}
-			</div>
-			<div className='content'>
-				<h2>{position + 1}</h2>
-				<Image
-					src={`https://www.themoviedb.org/t/p/original/${movie.poster}`}
-					alt={`${movie.title} poster`}
-					width={70}
-					height={105}
-				/>
-				<div>
-					<span>({movie.year})</span>
-					<h2>{movie.title}</h2>
-				</div>
-			</div>
-		</div>
-	);
-};
-
 const Container: FC = () => {
-	const {
-		list,
-		listMutators: { setList, toggleDelete },
-	} = useEditor();
+	const { working, updateList } = useEditor();
+
+	const { supabase, session } = useSupabase();
+	const [list, setList] = useState<DatabaseEntry<"Movies">[]>();
+
+	const { addMovie, toggleDelete, submitDeleteQueue } = useListMutator(setList);
 
 	const dropHandler: DragEventHandler<HTMLElement> = (event) => {
 		const target = event.target as HTMLElement;
 
-		if (!target.classList.contains("floater")) return;
+		if (!target.classList.contains("floater") || !list) return;
 
 		target.classList.remove("hover");
 
@@ -99,10 +41,8 @@ const Container: FC = () => {
 		if (rawNewPos === null) return;
 
 		const newPos = parseInt(rawNewPos);
-
 		const raw = event.dataTransfer.getData("movie");
 		const movie = JSON.parse(raw);
-
 		const isTop = target.classList.contains("top");
 
 		let pos = -1;
@@ -119,6 +59,8 @@ const Container: FC = () => {
 	};
 
 	const onMoveHandler = (self: DatabaseEntry<"Movies">, position: number, direction: 1 | -1) => {
+		if (!list) return;
+
 		const newPosition = position - direction;
 
 		list.splice(position, 1);
@@ -132,26 +74,68 @@ const Container: FC = () => {
 		element.classList.toggle("selected");
 	};
 
+	useEffect(() => {
+		if (!session) return;
+
+		supabase
+			.from("Movies")
+			.select("*, Lists!inner(_id)")
+			.eq("Lists._id", working)
+			.then((response) => {
+				if (response.error) {
+					console.error("There was an error querying list: '%s'", response.error.message);
+					setList([]);
+					return;
+				} else if (!response || !response.data) {
+					setList([]);
+					return;
+				}
+
+				const sanitisedData = response.data.map((item) => {
+					// https://stackoverflow.com/questions/43011742/
+					// ^ This is cool, unless it's frowned upon and bad practice, then it's not... ^
+					const { Lists: _, ...filtered } = item;
+					return filtered;
+				});
+
+				setList(sanitisedData);
+			});
+	}, [supabase, session, working]);
+
+	useEffect(() => {
+		if (list !== undefined) updateList(list);
+	}, [list, updateList]);
+
+	if (list === undefined) return <ContainerLoading />;
+
 	return (
-		<section
-			className='container-items'
-			onDrop={dropHandler}
-			onDragOver={(event) => event.preventDefault()}>
-			{list.length === 0 ? (
-				<span className='container-items-message'>It is empty here</span>
-			) : (
-				list.map((item, index) => (
-					<Item
-						key={item.tmdb_id}
-						movie={item}
-						position={index}
-						last={list.length - 1 === index}
-						mover={onMoveHandler}
-						select={onSelectHandler}
-					/>
-				))
-			)}
-		</section>
+		<>
+			<DialogAddMovie list={list} addMovie={addMovie} />
+
+			{/* UI Listeners ^^ */}
+
+			<section
+				className='container-items'
+				onDrop={dropHandler}
+				onDragOver={(event) => event.preventDefault()}>
+				{list.length === 0 ? (
+					<span className='container-items-message'>It is empty here</span>
+				) : (
+					list.map((item, index) => (
+						<ListItem
+							key={item.tmdb_id}
+							movie={item}
+							position={index}
+							last={list.length - 1 === index}
+							mover={onMoveHandler}
+							select={onSelectHandler}
+						/>
+					))
+				)}
+			</section>
+
+			<ButtonBar submitDeleteQueue={submitDeleteQueue} />
+		</>
 	);
 };
 
