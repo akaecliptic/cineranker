@@ -10,8 +10,6 @@ import type { Database } from "types/supabase";
 
 import "styles/pages/dashboard.scss";
 
-export const revalidate = 0;
-
 /* @ts-expect-error Async Server Component */
 const DashboardPage: FC = async () => {
 	const supabase = createServerComponentSupabaseClient<Database>({ headers, cookies });

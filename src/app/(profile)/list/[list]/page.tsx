@@ -11,8 +11,6 @@ import type { Database } from "types/supabase";
 
 import "styles/pages/list.scss";
 
-export const revalidate = 0;
-
 /* @ts-expect-error Async Server Component */
 const ListPage: DynamicSegment<{ list }> = async ({ params: { list: working } }) => {
 	const supabase = createServerComponentSupabaseClient<Database>({ headers, cookies });
