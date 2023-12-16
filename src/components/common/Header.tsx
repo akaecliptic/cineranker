@@ -4,7 +4,8 @@ import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { FaRegChartBar, FaRegUserCircle, FaUserCircle, FaUserSlash } from "react-icons/fa";
+import { FaRegUserCircle, FaUserEdit, FaUserSlash } from "react-icons/fa";
+import { FaRankingStar } from "react-icons/fa6";
 
 import { useSupabase } from "components/auxil/SupabaseProvider";
 import Dialog from "components/ui/Dialog";
@@ -96,10 +97,10 @@ const Header: FC = () => {
 					{session ? (
 						<>
 							<Link title='your rankings' href={`/${username}`} className='button'>
-								<FaRegChartBar />
+								<FaRankingStar />
 							</Link>
 							<Link title='your dashboard' href={`/dashboard`} className='button'>
-								<FaUserCircle />
+								<FaUserEdit />
 							</Link>
 							<hr className={styles.bottom} />
 							<button
