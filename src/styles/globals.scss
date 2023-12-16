@@ -64,7 +64,7 @@ button, a.button {
 	&:disabled {
 		cursor: default;
 		color: auxil.$color-text-secondary;
-		background-color: darken(auxil.$color-secondary, 5%);
+		background-color: auxil.$color-secondary;
 	}
 }
 

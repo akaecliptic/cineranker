@@ -4,7 +4,7 @@
 
 $color-accent: #A900A9;
 $color-primary: #7D0F7D;
-$color-secondary: red; // TODO - Change
+$color-secondary: #650065;
 
 $color-info: #225533;
 $color-alert: #995522;
@@ -62,11 +62,11 @@ $break-max: 3;
     transition: background-color .15s ease-in, color .15s ease-in;
 
     &:hover {
-        background-color: darken($color-primary, 10%);
+        background-color: $color-secondary;
     }
     
     &:active {
-        background-color: $color-secondary;
+        background-color: $color-accent;
     }
 }
 
