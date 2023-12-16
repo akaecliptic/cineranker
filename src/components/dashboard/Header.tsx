@@ -118,14 +118,16 @@ const Header: FC<{}> = () => {
 			/>
 
 			<header className='dashboard'>
-				<button
-					id='open-edit-tab'
-					type='button'
-					title='open profile tab'
-					onClick={() => setOpenTab(true)}>
-					<FaChevronLeft />
-					<Twemoji emoji={profile.avatar!} />
-				</button>
+				{!openTab && (
+					<button
+						id='open-edit-tab'
+						type='button'
+						title='open profile tab'
+						onClick={() => setOpenTab(true)}>
+						<FaChevronLeft />
+						<Twemoji emoji={profile.avatar!} />
+					</button>
+				)}
 			</header>
 
 			<aside id='edit-profile-tab' className={openTab ? "open" : ""}>

@@ -45,11 +45,12 @@ button.trigger {
 aside.container {
     width: 35%;
     height: 95%;
+    max-width: 500px;
 
     overflow: hidden;
 
     z-index: auxil.$level-floating;
-    position: absolute;
+    position: fixed;
     right: 1rem;
     bottom: 50%;
     transform: translateY(50%);

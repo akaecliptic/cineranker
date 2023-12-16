@@ -114,7 +114,7 @@ $break-max: 3;
 
     border: none;
     border-radius: .25rem;
-    outline: 3px solid $color-dark;
+    outline: 3px solid $color-primary;
 
     font-weight: 500;
     font-size: 1.25rem;
@@ -126,11 +126,11 @@ $break-max: 3;
 
     &::selection {
         color: $color-text;
-        background-color: $color-primary;
+        background-color: $color-dark;
     }
 
     &:focus-visible {
-        outline: 3px solid $color-primary;
+        outline: 3px solid $color-dark;
     }
 }
 
