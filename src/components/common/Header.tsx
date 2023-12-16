@@ -12,6 +12,7 @@ import Logo from "components/icons/Logo";
 
 import vars from "styles/vars.module.scss";
 import styles from "styles/modules/Header.module.scss";
+import Link from "next/link";
 
 const VarsCineranker = {
 	default: {
@@ -94,18 +95,12 @@ const Header: FC = () => {
 				<div className={styles["button-bar"]}>
 					{session ? (
 						<>
-							<button
-								type='button'
-								onClick={() => router.push(`/${username}`)}
-								title='your rankings'>
+							<Link title='your rankings' href={`/${username}`} className='button'>
 								<FaRegChartBar />
-							</button>
-							<button
-								type='button'
-								onClick={() => router.push(`/dashboard`)}
-								title='your dashboard'>
+							</Link>
+							<Link title='your dashboard' href={`/dashboard`} className='button'>
 								<FaUserCircle />
-							</button>
+							</Link>
 							<hr className={styles.bottom} />
 							<button
 								type='button'

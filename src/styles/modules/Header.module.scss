@@ -35,11 +35,11 @@
         flex-direction: column;
         gap: .5rem;
 
-        button {
+        button, a {
             @include auxil.button-icon-alt;
         }
 
-        button > * {
+        button > *, a > * {
             font-size: 1.75rem;
         }
     }
