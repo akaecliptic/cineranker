@@ -6,13 +6,12 @@ import { notFound } from "next/navigation";
 
 import Toasty from "components/ui/Toasty";
 import Twemoji from "components/icons/Twemoji";
-import EditableAvatar from "components/dashboard/EditableAvatar";
-import EditableSocial from "components/dashboard/EditableSocial";
+import PanelUser from "components/dashboard/PanelUser";
+import PanelProfile from "components/dashboard/PanelProfile";
+
 import { useSupabase } from "components/auxil/SupabaseProvider";
 
 import type { DatabaseEntry, ToastyPayload } from "types/auxil";
-
-type ProfileKey = Exclude<keyof DatabaseEntry<"Profiles">, "links">;
 
 const HeaderLoading: FC = () => {
 	return (
@@ -24,22 +23,13 @@ const HeaderLoading: FC = () => {
 	);
 };
 
-const dummyProfile: DatabaseEntry<"Profiles"> = {
-	user_id: "",
-	avatar: "🚫",
-	username: "",
-	flavour: "",
-	accent: null,
-	links: ["", "", ""],
-};
+const Header: FC = () => {
+	const { supabase, session } = useSupabase();
 
-const Header: FC<{}> = () => {
 	const [openTab, setOpenTab] = useState<boolean>(false);
 	const [profile, setProfile] = useState<DatabaseEntry<"Profiles">>();
-	const [links, setLinks] = useState<string[]>(dummyProfile.links!);
 	const [payload, setPayload] = useState<ToastyPayload>([null, "info"]);
-
-	const { supabase, session } = useSupabase();
+	const [editProfile, setEditProfile] = useState<boolean>(true);
 
 	const saveProfile = async () => {
 		if (session === null || !profile) return;
@@ -67,22 +57,42 @@ const Header: FC<{}> = () => {
 		setPayload(() => ["Profile saved", "info"]);
 	};
 
-	const updateProfile = (key: ProfileKey, value: string): void => {
-		setProfile((old) => {
-			old![key] = value;
-			return old;
-		});
+	const updatePassword = async (value: string | null, cause?: string) => {
+		if (session === null) return;
+
+		if (value === null) {
+			setPayload(() => [cause!, "alert"]);
+			return;
+		}
+
+		const { error } = await supabase.auth.updateUser({ password: value });
+
+		if (error) {
+			console.error("Error updating user password: '%s'", error.message);
+			setPayload(() => ["Updating password failed", "alert"]);
+			return;
+		}
+
+		setPayload(() => ["Password updated", "info"]);
 	};
 
-	const updateLinks = (index: number, value: string) => {
-		setLinks((old) => {
-			old.splice(index, 0, value);
-			return old;
-		});
-		setProfile((old) => {
-			old!.links = links;
-			return old;
-		});
+	const deleteAccount = async () => {
+		if (session === null) return;
+
+		const { error } = await supabase.auth.updateUser({ data: { deleted: true } });
+
+		if (error) {
+			console.error("Error deleting user profile: '%s'", error.message);
+			setPayload(() => ["Deleting profile failed", "alert"]);
+			return;
+		}
+
+		supabase.auth.signOut();
+	};
+
+	const toggleEditTab = (value: boolean) => {
+		if (value === editProfile) return;
+		setEditProfile(value);
 	};
 
 	useEffect(() => {
@@ -123,7 +133,10 @@ const Header: FC<{}> = () => {
 						id='open-edit-tab'
 						type='button'
 						title='open profile tab'
-						onClick={() => setOpenTab(true)}>
+						onClick={() => {
+							setOpenTab(true);
+							setEditProfile(true);
+						}}>
 						<FaChevronLeft />
 						<Twemoji emoji={profile.avatar!} />
 					</button>
@@ -138,62 +151,31 @@ const Header: FC<{}> = () => {
 					onClick={() => setOpenTab(false)}>
 					<FaTimes />
 				</button>
-				<div className='container'>
-					<EditableAvatar
-						initial={profile.avatar!}
-						onSelect={(emoji) => updateProfile("avatar", emoji)}
-					/>
-					<div className='fields'>
-						<label htmlFor='edit-username'>Username</label>
-						<input
-							id='edit-username'
-							type='text'
-							name='username'
-							maxLength={25}
-							title='username'
-							placeholder='Username'
-							defaultValue={profile.username!}
-							onChange={(event) =>
-								updateProfile("username", event.currentTarget.value)
-							}
-						/>
-					</div>
-					<div className='fields'>
-						<label htmlFor='edit-flavour'>About you</label>
-						<textarea
-							id='edit-flavour'
-							name='flavour'
-							maxLength={150}
-							title='About you'
-							placeholder='About you'
-							defaultValue={profile.flavour!}
-							rows={3}
-							onChange={(event) =>
-								updateProfile("flavour", event.currentTarget.value)
-							}
-						/>
-					</div>
-					<div className='fields'>
-						<label>Personal Links</label>
-						<EditableSocial
-							initial={profile.links![0]}
-							onChange={(value) => updateLinks(0, value)}
-						/>
-						<EditableSocial
-							initial={profile.links![1]}
-							onChange={(value) => updateLinks(1, value)}
-						/>
-						<EditableSocial
-							initial={profile.links![2]}
-							onChange={(value) => updateLinks(2, value)}
-						/>
-					</div>
-					<div>
-						<button type='button' title='save' onClick={saveProfile} className='save'>
-							save
-						</button>
-					</div>
+				<div className='toggle-bar'>
+					<button
+						type='button'
+						title='user'
+						className={editProfile ? "toggled" : "toggle"}
+						onClick={() => toggleEditTab(true)}>
+						Edit Profile
+					</button>
+					<button
+						type='button'
+						title='user'
+						className={!editProfile ? "toggled" : "toggle"}
+						onClick={() => toggleEditTab(false)}>
+						Edit User
+					</button>
 				</div>
+				{editProfile ? (
+					<PanelProfile
+						profile={profile}
+						setProfile={setProfile}
+						saveProfile={saveProfile}
+					/>
+				) : (
+					<PanelUser updatePassword={updatePassword} deleteAccount={deleteAccount} />
+				)}
 			</aside>
 		</>
 	);

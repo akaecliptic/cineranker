@@ -83,6 +83,27 @@ aside#edit-profile-tab {
         visibility: visible;
     }
 
+    > .toggle-bar {
+        width: 75%;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+
+        > .toggle, > .toggled {
+            flex: 1;
+            border-radius: 0;
+            @include auxil.button-accent;
+        }
+
+        > .toggle {
+            color: auxil.$color-text-secondary;
+        }
+
+        > .toggled {
+            border-bottom: 2px solid auxil.$color-text;
+        }
+    }
+
     > .container {
         width: 90%;
         max-width: 500px;
@@ -122,13 +143,37 @@ aside#edit-profile-tab > div.container {
 
         label {
             font-size: .9rem;
-            color: auxil.$color-text-secondary;
+            color: auxil.$color-text;
         }
     }
 
-    button.save {
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        margin-bottom: 2rem;
+    }
+
+    > div.button-bar {
+        display: flex;
+        gap: .5rem;
+    }
+
+    button.save, button.delete {
         font-size: 1.5rem;
         @include auxil.button-accent;
+    }
+
+    button.delete {
+        background-color: auxil.$color-danger;
+
+        &:hover {
+            background-color: darken(auxil.$color-danger, 10%)
+        }
+
+        &:active {
+            background-color: lighten(auxil.$color-danger, 5%);
+        }
     }
 } 
 

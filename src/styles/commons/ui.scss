@@ -15,6 +15,7 @@ div.ui-dialog-overlay {
 div.ui-dialog {
     width: fit-content;
     height: fit-content;
+    min-width: 300px;
 
     position: fixed;
     inset: 0;
