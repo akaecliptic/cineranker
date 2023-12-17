@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import { notFound, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import { useSupabase } from "components/auxil/SupabaseProvider";
@@ -54,10 +54,10 @@ const Card: FC<{}> = () => {
 
 			if (error) {
 				console.error("There was an error fetching user: '%s'", error.message);
-				notFound();
+				return;
 			} else if (data === null) {
 				console.warn(`User '${params.user}' could not be found.`);
-				notFound();
+				return;
 			} else if (data.length > 0 && !("list" in data[0])) {
 				console.warn("No confidence in data quality, returning empty data");
 				setLists([]);

@@ -2,7 +2,6 @@
 
 import { FC, useState, useEffect } from "react";
 import { FaChevronLeft, FaTimes } from "react-icons/fa";
-import { notFound } from "next/navigation";
 
 import Toasty from "components/ui/Toasty";
 import Twemoji from "components/icons/Twemoji";
@@ -106,10 +105,10 @@ const Header: FC = () => {
 
 			if (error) {
 				console.error("There was an error fetching user: '%s'", error.message);
-				notFound();
+				return;
 			} else if (!data) {
 				console.error("User could not be found, redirecting to home page");
-				notFound();
+				return;
 			}
 
 			setProfile(data);

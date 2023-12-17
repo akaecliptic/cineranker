@@ -42,6 +42,9 @@ const Header: FC<{}> = () => {
 	const [linkCopied, setLinkCopied] = useState<boolean>(false);
 	const [location, setLocation] = useState<string>("");
 	const [openTab, setOpenTab] = useState<boolean>(false);
+	const [isValid, setIsValid] = useState<boolean>(true);
+
+	const DEAD_ACCENT = "super dead";
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(location);
@@ -85,19 +88,29 @@ const Header: FC<{}> = () => {
 				.from("Profiles")
 				.select()
 				.eq("username", params.user)
+				.neq("accent", DEAD_ACCENT)
 				.single();
+
+			// notFound() called inside promises doesn't resolve properly.
+			// While crass, this solution does the job. At least for now
 
 			if (error) {
 				console.error("There was an error fetching user: '%s'", error.message);
-				notFound();
+				setIsValid(false);
+				return;
 			} else if (data === null) {
 				console.warn(`User '${params.user}' could not be found.`);
-				notFound();
+				setIsValid(false);
+				return;
 			}
 
 			setProfile(data);
 		})();
 	}, [supabase, params.user]);
+
+	useEffect(() => {
+		if (!isValid) notFound();
+	}, [isValid]);
 
 	useEffect(() => {
 		setLocation(window.location.href);
