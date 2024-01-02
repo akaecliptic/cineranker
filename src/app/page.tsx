@@ -10,9 +10,9 @@ const IndexPage: FC = () => {
 		<main>
 			<Welcome />
 			<section className='cards'>
-				<Card title='List' />
-				<Card title='Rank' />
-				<Card title='Share' />
+				<Card title='Collect' content='Collect movies in your lists' emoji='📋' />
+				<Card title='Rank' content='Rank movies in your lists' emoji='👑' />
+				<Card title='Share' content='Share your lists with others' emoji='🌐' />
 			</section>
 			<section className='mantra'>
 				<h5>And remember</h5>
