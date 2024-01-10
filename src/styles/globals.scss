@@ -37,6 +37,10 @@ main {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
+
+	@include auxil.responsive(1) {
+        padding: 1.5rem 0;
+    }
 }
 
 a {
