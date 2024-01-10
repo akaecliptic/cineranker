@@ -88,7 +88,6 @@ const Header: FC<{}> = () => {
 				.from("Profiles")
 				.select()
 				.eq("username", params.user)
-				.neq("accent", DEAD_ACCENT)
 				.single();
 
 			// notFound() called inside promises doesn't resolve properly.
@@ -100,6 +99,10 @@ const Header: FC<{}> = () => {
 				return;
 			} else if (data === null) {
 				console.warn(`User '${params.user}' could not be found.`);
+				setIsValid(false);
+				return;
+			} else if (data.accent === DEAD_ACCENT) {
+				console.warn(`Invalid user '${params.user}' could not be found.`);
 				setIsValid(false);
 				return;
 			}
