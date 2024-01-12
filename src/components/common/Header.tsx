@@ -1,10 +1,10 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { FaRegUserCircle, FaUserEdit, FaUserSlash } from "react-icons/fa";
+import { FaHome, FaRegUserCircle, FaUserEdit, FaUserSlash } from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
 
 import { useSupabase } from "components/auxil/SupabaseProvider";
@@ -26,9 +26,14 @@ const VarsCineranker = {
 
 const Header: FC = () => {
 	const { supabase, session } = useSupabase();
+
 	const router = useRouter();
+	const pathname = usePathname();
+
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const [username, setUsername] = useState<string>();
+	const [toggleButtonBar, setToggleButtonBar] = useState<boolean>(false);
+	const [currentPath, setCurrentPath] = useState<string>(pathname);
 
 	useEffect(() => {
 		if (!session) {
@@ -66,6 +71,13 @@ const Header: FC = () => {
 		};
 	}, [supabase]);
 
+	useEffect(() => {
+		if (currentPath !== pathname) {
+			setToggleButtonBar(false);
+			setCurrentPath(pathname);
+		}
+	}, [pathname, currentPath]);
+
 	return (
 		<>
 			<Dialog show={showForm} onClose={() => setShowForm(false)}>
@@ -84,16 +96,19 @@ const Header: FC = () => {
 				<span className='credit'>powered by supabase</span>
 			</Dialog>
 
-			<header className={styles.container}>
+			<header className={`${styles.container} ${toggleButtonBar ? styles.toggled : ""}`}>
 				<button
 					className={styles.logo}
 					type='button'
-					onClick={() => router.push("/")}
+					onClick={() => setToggleButtonBar(!toggleButtonBar)}
 					title='home'>
 					<Logo />
 				</button>
 				<hr />
-				<div className={styles["button-bar"]}>
+				<div className={`${styles["button-bar"]} ${toggleButtonBar ? styles.toggled : ""}`}>
+					<button type='button' onClick={() => router.push("/")} title='home'>
+						<FaHome />
+					</button>
 					{session ? (
 						<>
 							<Link title='your rankings' href={`/${username}`} className='button'>
@@ -111,9 +126,11 @@ const Header: FC = () => {
 							</button>
 						</>
 					) : (
-						<button type='button' onClick={() => setShowForm(true)} title='sign up'>
-							<FaRegUserCircle />
-						</button>
+						<>
+							<button type='button' onClick={() => setShowForm(true)} title='sign up'>
+								<FaRegUserCircle />
+							</button>
+						</>
 					)}
 				</div>
 			</header>
