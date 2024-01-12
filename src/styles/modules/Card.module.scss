@@ -52,6 +52,10 @@
             font-size: 1.5rem;
         }
     }
+
+    @include auxil.responsive(1) {
+        padding: .5rem;
+    }
 }
 
 .dots {
@@ -102,6 +106,11 @@
             grid-template-columns: 1fr 1fr 1fr;
             grid-template-rows: min-content;
             gap: 1.5rem;
+
+            @include auxil.responsive(1) {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+            }
         }
     }
 }
